@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.chinmay.bloodglucoselogbook.domain.GlucoseMeasurement
 import com.chinmay.bloodglucoselogbook.domain.LogbookUsecase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.DateFormat
@@ -66,7 +65,11 @@ class GlucoseMonitorViewmodel(private val logbookUsecase: LogbookUsecase): ViewM
         }
     }
 
-    fun setAverageValue(
+    fun updateAverageValue(selectedUnit: GlucoseUnit){
+        averageValue = setAverageValue(measurements, selectedUnit)
+    }
+
+    private fun setAverageValue(
         result: List<GlucoseMeasurement>,
         selectedUnit: GlucoseUnit = GlucoseUnit.MOLE_PER_LITER
     ): String {
