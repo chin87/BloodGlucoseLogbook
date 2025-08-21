@@ -39,15 +39,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.chinmay.bloodglucoselogbook.ui.GlucoseMonitorViewmodel
 import com.chinmay.bloodglucoselogbook.ui.GlucoseUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GlucoseTrackerScreen(glucoseMonitorViewmodel: GlucoseMonitorViewmodel) {
+fun GlucoseTrackerScreen(
+    averageValue: String,
+    updateAverageValue: (selectedUnit: GlucoseUnit) -> Unit,
+    addGlucoseMeasurements: (selectedUnit: GlucoseUnit, measurement: Double) -> Unit
+) {
     var selectedUnit by remember { mutableStateOf(GlucoseUnit.MOLE_PER_LITER) }
     var glucoseValue by remember { mutableStateOf("0.0") }
-    val averageValue = glucoseMonitorViewmodel.averageValue
     val MOLE_PER_LITER = "mmol/L"
     val MG_PER_DECILITER = "mg/dL"
 
@@ -56,6 +58,7 @@ fun GlucoseTrackerScreen(glucoseMonitorViewmodel: GlucoseMonitorViewmodel) {
             try {
                 glucoseValue.isNotEmpty() && glucoseValue.toDouble() > 0
             } catch (e: NumberFormatException) {
+                e.toString()
                 false
             }
         }
@@ -115,7 +118,7 @@ fun GlucoseTrackerScreen(glucoseMonitorViewmodel: GlucoseMonitorViewmodel) {
                         selected = (selectedUnit == GlucoseUnit.MG_PER_DECILITER),
                         onClick = {
                             selectedUnit = GlucoseUnit.MG_PER_DECILITER
-                            glucoseMonitorViewmodel.updateAverageValue(selectedUnit)
+                            updateAverageValue(selectedUnit)
                         }, role = Role.RadioButton
                     )
                     .padding(vertical = 4.dp),
@@ -143,7 +146,7 @@ fun GlucoseTrackerScreen(glucoseMonitorViewmodel: GlucoseMonitorViewmodel) {
                         selected = (selectedUnit == GlucoseUnit.MOLE_PER_LITER),
                         onClick = {
                             selectedUnit = GlucoseUnit.MOLE_PER_LITER
-                            glucoseMonitorViewmodel.updateAverageValue(selectedUnit)
+                            updateAverageValue(selectedUnit)
                         }, role = Role.RadioButton
                     )
                     .padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically
@@ -199,8 +202,7 @@ fun GlucoseTrackerScreen(glucoseMonitorViewmodel: GlucoseMonitorViewmodel) {
         // Save button
         Button(
             onClick = {
-                println("Saving glucose value: $glucoseValue $selectedUnit")
-                glucoseMonitorViewmodel.addGlucoseMeasurements(selectedUnit, glucoseValue.toDouble())
+                addGlucoseMeasurements(selectedUnit, glucoseValue.toDouble())
                 glucoseValue = ""
             },
             modifier = Modifier
@@ -229,6 +231,9 @@ fun GlucoseTrackerScreen(glucoseMonitorViewmodel: GlucoseMonitorViewmodel) {
 @Composable
 fun GlucoseTrackerScreenPreview() {
     MaterialTheme {
-        //GlucoseTrackerScreen()
+        GlucoseTrackerScreen(
+            "1.0",
+            {},
+            { selectedUnit, measurement -> })
     }
 }

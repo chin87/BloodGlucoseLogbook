@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.chinmay.bloodglucoselogbook.ui.screen.GlucoseTrackerScreen
@@ -21,8 +20,15 @@ class GlucoseMonitorMainActivity : ComponentActivity() {
         setContent {
             BloodGlucoseLogbookTheme {
                 Column {
-                    GlucoseTrackerScreen(glucoseMonitorViewmodel)
-                    MeasurementsListScreen(glucoseMonitorViewmodel)
+                    GlucoseTrackerScreen(
+                        glucoseMonitorViewmodel.averageValue,
+                        glucoseMonitorViewmodel::updateAverageValue,
+                        glucoseMonitorViewmodel::addGlucoseMeasurements
+                    )
+                    MeasurementsListScreen(
+                        glucoseMonitorViewmodel.measurements,
+                        glucoseMonitorViewmodel.isLoading
+                    )
                 }
             }
         }
@@ -33,7 +39,12 @@ class GlucoseMonitorMainActivity : ComponentActivity() {
 @Composable
 fun ScreenPreview() {
     BloodGlucoseLogbookTheme {
-        //GlucoseTrackerScreen()
-        //MeasurementsListScreen()
+        Column {
+            GlucoseTrackerScreen(
+                "1.0",
+                {},
+                { selectedUnit, measurement -> })
+            MeasurementsListScreen(dummyListGlucoseMeasurement(), false)
+        }
     }
 }

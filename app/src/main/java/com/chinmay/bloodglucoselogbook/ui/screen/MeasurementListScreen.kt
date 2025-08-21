@@ -28,13 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chinmay.bloodglucoselogbook.domain.GlucoseMeasurement
-import com.chinmay.bloodglucoselogbook.ui.GlucoseMonitorViewmodel
+import com.chinmay.bloodglucoselogbook.ui.dummyListGlucoseMeasurement
 
 @Composable
-fun MeasurementsListScreen(viewModel: GlucoseMonitorViewmodel) {
-    val measurements = viewModel.measurements
-    val isLoading = viewModel.isLoading
-
+fun MeasurementsListScreen( measurements: List<GlucoseMeasurement>, isLoading: Boolean) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -142,6 +139,6 @@ fun MeasurementItem(measurement: GlucoseMeasurement) {
 @Composable
 fun MeasurementsListScreenPreview() {
     MaterialTheme {
-        //MeasurementsListScreen()
+        MeasurementsListScreen(dummyListGlucoseMeasurement(), false)
     }
 }
