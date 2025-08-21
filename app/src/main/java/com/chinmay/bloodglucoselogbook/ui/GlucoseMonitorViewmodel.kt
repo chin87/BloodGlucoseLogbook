@@ -19,7 +19,7 @@ class GlucoseMonitorViewmodel(private val logbookUsecase: LogbookUsecase): ViewM
     var isLoading by mutableStateOf(false)
         protected set
     var measurements by mutableStateOf<List<GlucoseMeasurement>>(emptyList())
-        private set
+        internal set
 
     var averageValue by mutableStateOf ("")
 
